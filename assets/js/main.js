@@ -1,7 +1,6 @@
 /* ============================================================
-   AI Engineering Notes — landing page behaviour
-   - 테마 전환 (라이트 / 다크 / 시스템)
-   - 모바일 메뉴
+   AI Engineering Notes
+   - 테마 전환 (시스템 / 라이트 / 다크)
    - 구독 폼 유효성 검사
    - Google AdSense 로딩 (window.SITE_CONFIG 기반)
    ============================================================ */
@@ -23,11 +22,7 @@
   }
 
   function applyTheme(theme) {
-    if (theme === "light" || theme === "dark") {
-      root.setAttribute("data-theme", theme);
-    } else {
-      root.setAttribute("data-theme", "auto");
-    }
+    root.setAttribute("data-theme", theme === "light" || theme === "dark" ? theme : "auto");
     var icon = document.querySelector(".theme-icon");
     if (icon) icon.textContent = theme === "dark" ? "☾" : theme === "light" ? "☀" : "◐";
   }
@@ -38,8 +33,7 @@
   if (themeToggle) {
     themeToggle.addEventListener("click", function () {
       var order = ["auto", "light", "dark"];
-      var current = storedTheme() || "auto";
-      var next = order[(order.indexOf(current) + 1) % order.length];
+      var next = order[(order.indexOf(storedTheme() || "auto") + 1) % order.length];
       try {
         localStorage.setItem(THEME_KEY, next);
       } catch (e) {
@@ -53,46 +47,12 @@
     });
   }
 
-  /* ---- 2. 모바일 메뉴 ------------------------------------ */
-  var menuToggle = document.querySelector(".menu-toggle");
-  var mobileNav = document.getElementById("mobile-nav");
-
-  function closeMenu() {
-    if (!mobileNav || !menuToggle) return;
-    mobileNav.hidden = true;
-    mobileNav.removeAttribute("data-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "메뉴 열기");
-  }
-
-  if (menuToggle && mobileNav) {
-    menuToggle.addEventListener("click", function () {
-      var isOpen = menuToggle.getAttribute("aria-expanded") === "true";
-      if (isOpen) {
-        closeMenu();
-      } else {
-        mobileNav.hidden = false;
-        mobileNav.setAttribute("data-open", "true");
-        menuToggle.setAttribute("aria-expanded", "true");
-        menuToggle.setAttribute("aria-label", "메뉴 닫기");
-      }
-    });
-
-    mobileNav.addEventListener("click", function (event) {
-      if (event.target.tagName === "A") closeMenu();
-    });
-
-    window.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeMenu();
-    });
-  }
-
-  /* ---- 3. 연도 자동 갱신 --------------------------------- */
+  /* ---- 2. 연도 자동 갱신 --------------------------------- */
   Array.prototype.forEach.call(document.querySelectorAll("[data-year]"), function (el) {
     el.textContent = String(new Date().getFullYear());
   });
 
-  /* ---- 4. 구독 폼 --------------------------------------- */
+  /* ---- 3. 구독 폼 --------------------------------------- */
   var form = document.querySelector(".subscribe-form");
   var note = document.querySelector(".form-note");
 
@@ -105,21 +65,21 @@
 
       note.classList.remove("is-error", "is-ok");
       if (!valid) {
-        note.textContent = "올바른 이메일 주소를 입력해 주세요.";
+        note.textContent = "이메일 주소를 다시 확인해 주세요.";
         note.classList.add("is-error");
         input.focus();
         return;
       }
 
       // 메일 서비스(Buttondown, ConvertKit 등)를 연결하기 전까지는
-      // 폼 동작만 확인할 수 있도록 로컬 처리합니다.
-      note.textContent = "구독 신청이 접수되었습니다. 확인 메일을 보내드릴게요.";
+      // 폼 동작만 확인할 수 있도록 로컬에서 처리합니다.
+      note.textContent = "신청되었습니다. 확인 메일을 보내드릴게요.";
       note.classList.add("is-ok");
       form.reset();
     });
   }
 
-  /* ---- 5. Google AdSense -------------------------------- */
+  /* ---- 4. Google AdSense -------------------------------- */
   var client = (CONFIG.adsenseClient || "").trim();
   var slots = CONFIG.adSlots || {};
   var slotEls = document.querySelectorAll(".ad-slot");
@@ -132,14 +92,11 @@
 
   if (!client) {
     // 게시자 ID가 없으면 광고를 로드하지 않습니다.
-    // 로컬/미리보기에서는 배치만 확인할 수 있도록 자리표시자를 표시합니다.
+    // 로컬/미리보기에서만 배치 확인용 자리표시자를 표시합니다.
     if (isPreview) {
       Array.prototype.forEach.call(slotEls, function (el) {
-        el.style.cssText =
-          "min-height:100px;display:flex;align-items:center;justify-content:center;" +
-          "border:1px dashed var(--border-strong);border-radius:var(--radius-sm);" +
-          "color:var(--text-muted);font-size:13px;";
-        el.textContent = "광고 영역 (" + (el.dataset.adPosition || "ad") + ")";
+        el.setAttribute("data-placeholder", "");
+        el.textContent = el.dataset.adPosition || "ad";
       });
     }
     return;
@@ -156,7 +113,7 @@
   Array.prototype.forEach.call(slotEls, function (el) {
     var position = el.dataset.adPosition;
     var slotId = (slots[position] || "").trim();
-    if (!slotId) return; // 슬롯 ID가 없는 영역은 건너뜁니다.
+    if (!slotId) return; // 슬롯 ID가 비어 있는 영역은 건너뜁니다.
 
     var ins = document.createElement("ins");
     ins.className = "adsbygoogle";

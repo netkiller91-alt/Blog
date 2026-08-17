@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  글을 발행할 때마다 <item>을 추가하세요.
+  정적 사이트 생성기를 붙인다면 이 파일은 생성기가 만들도록 넘기면 됩니다.
+-->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI Engineering Notes</title>
+    <link>https://example.com/</link>
+    <description>LLM 제품을 만들면서 남기는 기록.</description>
+    <language>ko</language>
+    <atom:link href="https://example.com/feed.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>청킹을 바꿨더니 정답률이 18% 올랐다</title>
+      <link>https://example.com/</link>
+      <guid isPermaLink="false">example-2026-08-11-chunking</guid>
+      <pubDate>Tue, 11 Aug 2026 09:00:00 +0900</pubDate>
+      <description>고정 길이 512 토큰에서 문서 구조 기반 청킹으로 옮기며 측정한 것들.</description>
+    </item>
+  </channel>
+</rss>
