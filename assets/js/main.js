@@ -1,7 +1,6 @@
 /* ============================================================
    AI Engineering Notes
    - 테마 전환 (시스템 / 라이트 / 다크)
-   - 구독 폼 유효성 검사
    - Google AdSense 로딩 (window.SITE_CONFIG 기반)
    ============================================================ */
 (function () {
@@ -52,34 +51,7 @@
     el.textContent = String(new Date().getFullYear());
   });
 
-  /* ---- 3. 구독 폼 --------------------------------------- */
-  var form = document.querySelector(".subscribe-form");
-  var note = document.querySelector(".form-note");
-
-  if (form && note) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var input = form.querySelector("input[type='email']");
-      var value = (input.value || "").trim();
-      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
-
-      note.classList.remove("is-error", "is-ok");
-      if (!valid) {
-        note.textContent = "이메일 주소를 다시 확인해 주세요.";
-        note.classList.add("is-error");
-        input.focus();
-        return;
-      }
-
-      // 메일 서비스(Buttondown, ConvertKit 등)를 연결하기 전까지는
-      // 폼 동작만 확인할 수 있도록 로컬에서 처리합니다.
-      note.textContent = "신청되었습니다. 확인 메일을 보내드릴게요.";
-      note.classList.add("is-ok");
-      form.reset();
-    });
-  }
-
-  /* ---- 4. Google AdSense -------------------------------- */
+  /* ---- 3. Google AdSense -------------------------------- */
   var client = (CONFIG.adsenseClient || "").trim();
   var slots = CONFIG.adSlots || {};
   var slotEls = document.querySelectorAll(".ad-slot");

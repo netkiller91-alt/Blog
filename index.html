@@ -51,8 +51,8 @@
   <header class="masthead">
     <a class="site-title" href="./index.html">AI Engineering Notes</a>
     <nav aria-label="주요 메뉴">
-      <a href="#posts">글</a>
-      <a href="#about">소개</a>
+      <a href="#posts">읽을거리</a>
+      <a href="#about">요즘</a>
       <a href="./feed.xml">RSS</a>
       <button class="theme-toggle" type="button" aria-label="테마 전환" title="테마 전환">
         <span class="theme-icon" aria-hidden="true">◐</span>
@@ -83,78 +83,62 @@
 
     <div class="ad-slot" data-ad-position="top"></div>
 
-    <!-- ── 글 목록 ──────────────────────────────────────── -->
+    <!-- ── 읽을거리 ─────────────────────────────────────── -->
+    <!--
+      아래 항목은 실제 기사로 연결되는 외부 링크입니다.
+      직접 쓴 글로 채울 때는 href를 자기 글 주소로 바꾸고 .source를 지우세요.
+    -->
     <section id="posts">
-      <h2 class="section-label">글</h2>
+      <h2 class="section-label">읽을거리</h2>
+      <p class="section-note">밖에서 읽은 것들. 제목을 누르면 원문으로 갑니다. (2026년 8월)</p>
 
-      <p class="year">2026</p>
       <ul class="post-list">
         <li>
-          <time datetime="2026-08-11">08.11</time>
+          <time datetime="2026-08-16">08.16</time>
           <div>
-            <a href="#">청킹을 바꿨더니 정답률이 18% 올랐다</a>
-            <p>고정 길이 512 토큰에서 문서 구조 기반 청킹으로 옮기며 측정한 것들. 실패 케이스 200건을 직접 분류한 표도 같이.</p>
+            <a href="https://techcrunch.com/2026/08/16/stripe-will-reportedly-acquire-ai-gateway-startup-openrouter-for-7b/" target="_blank" rel="noopener noreferrer">Stripe, AI 게이트웨이 OpenRouter를 70억 달러 이상에 인수</a>
+            <p><span class="source">TechCrunch</span> 400개 넘는 모델을 중계하던 라우팅 계층이 결제 회사로 넘어갔다. 모델 선택을 외부에 맡긴 팀이라면 계약 조건부터 다시 볼 시점.</p>
           </div>
         </li>
         <li>
-          <time datetime="2026-08-04">08.04</time>
+          <time datetime="2026-08-16">08.16</time>
           <div>
-            <a href="#">툴 20개짜리 에이전트가 조용히 망가지는 이유</a>
-            <p>툴 설명이 길어질수록 선택 정확도가 떨어진다. 계층적 라우팅으로 되돌린 과정.</p>
+            <a href="https://qz.com/deepseek-api-price-increase-v4-peak-off-peak-081326" target="_blank" rel="noopener noreferrer">DeepSeek, API 가격을 최대 1,100% 인상하고 피크·오프피크 과금 도입</a>
+            <p><span class="source">Quartz</span> 단일 정액 요금이 사라졌다. 저가 모델을 전제로 짠 파이프라인은 배치 작업을 오프피크로 미루는 설계가 필요해졌다.</p>
           </div>
         </li>
         <li>
-          <time datetime="2026-07-28">07.28</time>
+          <time datetime="2026-08-13">08.13</time>
           <div>
-            <a href="#">LLM 심사위원을 믿기 전에 확인한 4가지</a>
-            <p>사람 라벨과의 일치율, 위치 편향, 길이 편향, 그리고 점수 인플레이션.</p>
+            <a href="https://www.axios.com/2026/08/13/google-gemini-37-flash" target="_blank" rel="noopener noreferrer">Google, Gemini 3.7 Flash 공개 — 3.6 출시 3주 만</a>
+            <p><span class="source">Axios</span> 코딩·에이전트 워크로드용. DeepSWE v1.1에서 49.0% → 65.3%로 올랐고, 연말까지 입력 100만 토큰당 $0.75의 도입가가 적용된다.</p>
           </div>
         </li>
 
         <li class="ad-row"><div class="ad-slot" data-ad-position="inFeed"></div></li>
 
         <li>
-          <time datetime="2026-07-21">07.21</time>
+          <time datetime="2026-08-08">08.08</time>
           <div>
-            <a href="#">프롬프트 캐싱으로 월 API 비용을 절반으로</a>
-            <p>캐시 히트율을 올리는 프롬프트 배치 순서, 그리고 캐시가 오히려 손해인 구간.</p>
+            <a href="https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/" target="_blank" rel="noopener noreferrer">OpenAI, 프레젠테이션 스타트업 NextSlide 인수</a>
+            <p><span class="source">TechCrunch</span> 문서·노트를 편집 가능한 슬라이드로 바꾸는 제품. 챗 인터페이스 밖의 실제 업무 도구로 범위를 넓히는 흐름이다.</p>
           </div>
         </li>
         <li>
-          <time datetime="2026-07-14">07.14</time>
+          <time datetime="2026-08-07">08.07</time>
           <div>
-            <a href="#">벡터 DB를 걷어내고 Postgres로 돌아왔다</a>
-            <p>문서 50만 건까지는 pgvector로 충분했던 이유와, 충분하지 않아지는 지점.</p>
+            <a href="https://www.langchain.com/blog/managed-deep-agents-is-now-in-public-beta" target="_blank" rel="noopener noreferrer">LangChain, Managed Deep Agents 퍼블릭 베타</a>
+            <p><span class="source">LangChain</span> 지속 실행·체크포인팅·샌드박스·휴먼 인 더 루프를 런타임이 맡는다. 에이전트에서 손이 제일 많이 가는 부분이 운영이라는 걸 인정한 제품.</p>
           </div>
         </li>
         <li>
-          <time datetime="2026-07-07">07.07</time>
+          <time datetime="2026-08-02">08.02</time>
           <div>
-            <a href="#">AI 기능 스펙은 실패를 먼저 정의해야 한다</a>
-            <p>“정확하게 답한다”는 스펙이 아니다. 허용 오류율부터 합의하는 템플릿.</p>
+            <a href="https://artificialintelligenceact.eu/transparency-rules-article-50/" target="_blank" rel="noopener noreferrer">EU AI Act 제50조 투명성 의무 시행</a>
+            <p><span class="source">EU AI Act</span> 챗봇은 AI임을 밝혀야 하고, 생성 결과물은 기계 판독 가능하게 표시해야 한다. 위반 시 최대 1,500만 유로 또는 전 세계 매출의 3%.</p>
           </div>
         </li>
       </ul>
-
-      <p class="year">2025</p>
-      <ul class="post-list">
-        <li>
-          <time datetime="2025-12-19">12.19</time>
-          <div>
-            <a href="#">1년 동안 만든 RAG 시스템을 다시 설계한다면</a>
-            <p>처음부터 다시 한다면 바꿀 일곱 가지. 대부분은 모델이 아니라 데이터 쪽이다.</p>
-          </div>
-        </li>
-        <li>
-          <time datetime="2025-11-30">11.30</time>
-          <div>
-            <a href="#">임베딩 모델을 바꿀 때 생기는 조용한 비용</a>
-            <p>재색인 시간, 캐시 무효화, 그리고 아무도 말해주지 않는 평가 기준선 리셋.</p>
-          </div>
-        </li>
-      </ul>
-
-      <p class="more"><a href="#">글 전체 목록 →</a></p>
     </section>
 
     <!-- ── 요즘 ─────────────────────────────────────────── -->
@@ -166,18 +150,6 @@
         <li><span>쓰는 것</span> Python, Postgres + pgvector, 그리고 생각보다 많은 SQL.</li>
       </ul>
       <p class="now-note">2026년 8월 기준. 가끔 갱신합니다.</p>
-    </section>
-
-    <!-- ── 구독 ─────────────────────────────────────────── -->
-    <section class="subscribe">
-      <h2 class="section-label">메일로 받기</h2>
-      <p>새 글이 올라오면 메일로 알려드립니다. 한 달에 두세 통이고, 광고는 넣지 않습니다.</p>
-      <form class="subscribe-form" novalidate>
-        <label class="sr-only" for="email">이메일 주소</label>
-        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-        <button type="submit">구독</button>
-      </form>
-      <p class="form-note" role="status" aria-live="polite"></p>
     </section>
 
     <div class="ad-slot" data-ad-position="footer"></div>

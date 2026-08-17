@@ -153,6 +153,13 @@ section { margin-top: 3.25rem; }
 }
 
 /* ---- 글 목록 ------------------------------------------- */
+.section-note {
+  margin: -.5rem 0 1.5rem;
+  font-size: .88rem;
+  color: var(--ink-faint);
+}
+
+/* 직접 쓴 글을 연도별로 묶을 때 씁니다. */
 .year {
   font-family: var(--mono);
   font-size: .8rem;
@@ -193,10 +200,21 @@ section { margin-top: 3.25rem; }
 .post-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .post-list p {
-  margin: .2rem 0 0;
+  margin: .25rem 0 0;
   font-size: .93rem;
   line-height: 1.65;
   color: var(--ink-soft);
+}
+
+/* 외부 기사일 때 출처 표시 */
+.source {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  padding: .05rem .35rem;
+  margin-right: .4rem;
+  white-space: nowrap;
 }
 
 .post-list .ad-row { display: block; border-top: 1px solid var(--rule); padding: 0; }
@@ -221,40 +239,6 @@ section { margin-top: 3.25rem; }
   padding-top: .35rem;
 }
 .now-note { margin-top: 1rem; font-size: .84rem; color: var(--ink-faint); }
-
-/* ---- 구독 ---------------------------------------------- */
-.subscribe p { color: var(--ink-soft); font-size: .97rem; }
-
-.subscribe-form {
-  display: flex; gap: .5rem; flex-wrap: wrap;
-  margin-top: 1rem;
-}
-.subscribe-form input {
-  flex: 1 1 15rem; min-width: 0;
-  padding: .5rem .1rem;
-  font-family: inherit; font-size: .95rem; color: var(--ink);
-  background: transparent;
-  border: 0; border-bottom: 1px solid var(--rule);
-}
-.subscribe-form input::placeholder { color: var(--ink-faint); }
-.subscribe-form input:focus { outline: 0; border-bottom-color: var(--ink); }
-
-.subscribe-form button {
-  padding: .45rem 1.1rem;
-  font-family: inherit; font-size: .9rem; color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--rule);
-  cursor: pointer;
-  transition: border-color .15s ease, background .15s ease;
-}
-.subscribe-form button:hover { border-color: var(--ink-faint); background: var(--paper-2); }
-
-.form-note { min-height: 1.4rem; margin-top: .75rem; font-size: .88rem; color: var(--ink-faint); }
-.form-note.is-error { color: #b3261e; }
-:root[data-theme="dark"] .form-note.is-error { color: #f2938c; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .form-note.is-error { color: #f2938c; }
-}
 
 /* ---- 광고 ---------------------------------------------- */
 .ad-slot { margin: 2.5rem 0; }
