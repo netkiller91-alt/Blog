@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Google AdSense 크롤러
+User-agent: Mediapartners-Google
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml
