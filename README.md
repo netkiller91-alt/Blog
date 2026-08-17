@@ -58,8 +58,9 @@ python3 -m http.server 8000
    ```
 
 3. `ads.txt`의 주석을 해제하고 게시자 ID를 본인 것으로 교체합니다.
-4. `robots.txt`, `sitemap.xml`, `feed.xml`, `index.html`의 `canonical`/`og:url`에 있는
-   `https://example.com`을 실제 도메인으로 바꿉니다.
+4. 사이트 주소는 `https://netkiller91-alt.github.io/desktop-tutorial/`로 설정되어 있습니다.
+   커스텀 도메인을 붙였다면 `robots.txt`, `sitemap.xml`, `feed.xml`,
+   `index.html`의 `canonical`/`og:url`을 새 주소로 바꾸세요.
 
 `adsenseClient`가 비어 있으면 AdSense 스크립트를 아예 로드하지 않으므로,
 승인 전에도 콘솔 오류 없이 사이트를 운영할 수 있습니다.
@@ -92,8 +93,14 @@ python3 -m http.server 8000
 
 ## 배포 (GitHub Pages)
 
-저장소 **Settings → Pages → Source**를 `Deploy from a branch`로 두고
-배포할 브랜치와 `/ (root)`를 선택하면 됩니다.
+`main`에 푸시하면 `.github/workflows/pages.yml`이 자동으로 배포합니다.
+빌드 단계 없이 저장소 루트를 그대로 올립니다.
+
+- 공개 주소: <https://netkiller91-alt.github.io/desktop-tutorial/>
+- 워크플로의 `configure-pages` 단계가 Pages를 자동으로 켜므로,
+  Settings에서 따로 만질 것은 없습니다.
+- 커스텀 도메인을 쓰려면 저장소 루트에 `CNAME` 파일을 추가하고
+  Settings → Pages에서 도메인을 등록하세요.
 
 ## 남은 연결 작업
 

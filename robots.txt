@@ -5,4 +5,4 @@ Allow: /
 User-agent: Mediapartners-Google
 Allow: /
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://netkiller91-alt.github.io/desktop-tutorial/sitemap.xml
