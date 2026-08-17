@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  글을 발행할 때마다 <item>을 추가하세요.
+  정적 사이트 생성기를 붙인다면 이 파일은 생성기가 만들도록 넘기면 됩니다.
+-->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI Engineering Notes</title>
+    <link>https://netkiller91-alt.github.io/desktop-tutorial/</link>
+    <description>LLM 제품을 만들면서 남기는 기록.</description>
+    <language>ko</language>
+    <atom:link href="https://netkiller91-alt.github.io/desktop-tutorial/feed.xml" rel="self" type="application/rss+xml" />
+
+    <!-- 아직 발행한 글이 없습니다. 첫 글을 쓰면 아래 형식으로 <item>을 추가하세요.
+
+    <item>
+      <title>글 제목</title>
+      <link>https://netkiller91-alt.github.io/desktop-tutorial/posts/글-주소.html</link>
+      <guid isPermaLink="true">https://netkiller91-alt.github.io/desktop-tutorial/posts/글-주소.html</guid>
+      <pubDate>Mon, 01 Sep 2026 09:00:00 +0900</pubDate>
+      <description>한 줄 요약.</description>
+    </item>
+    -->
+  </channel>
+</rss>
