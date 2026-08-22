@@ -7,11 +7,14 @@ Google AdSense 연동 지점이 미리 준비되어 있습니다.
 ## 구성
 
 ```
-index.html            홈 (인사 · 읽을거리 · 요즘)
+index.html            홈 (인사 · 글 · 읽을거리 · 요즘)
+editor.html           브라우저 글쓰기 도구 (noindex, 광고 없음)
+posts/                발행된 글 (editor.html이 생성)
 privacy.html          개인정보처리방침 (AdSense 심사에 필요)
 feed.xml              RSS 피드
 assets/css/style.css  단일 칼럼 레이아웃, 라이트/다크
 assets/js/main.js     테마 전환, AdSense 로더
+assets/js/editor.js   글쓰기 도구 로직
 ads.txt               AdSense 게시자 인증 파일 (승인 후 값 입력)
 robots.txt            크롤러 정책 (Mediapartners-Google 허용)
 sitemap.xml           사이트맵
@@ -70,9 +73,39 @@ python3 -m http.server 8000
 > AdSense 심사에는 충분한 분량의 실제 콘텐츠가 필요합니다. 현재 글 목록은
 > 레이아웃 확인용 예시이므로, 실제 글로 교체한 뒤 심사를 신청하세요.
 
-## 읽을거리 / 글 목록
+## 사이트에서 바로 글쓰기
 
-홈의 `읽을거리` 섹션은 지금 **실제 기사로 나가는 외부 링크**로 채워져 있습니다
+`/editor.html`에서 글을 쓰면 GitHub Contents API로 저장소에 직접 커밋되고,
+배포 워크플로가 사이트에 반영합니다. 로컬 개발 환경이 없어도 됩니다.
+
+1. [Fine-grained 토큰](https://github.com/settings/personal-access-tokens/new)을
+   발급합니다. 권한은 **이 저장소 하나**에 **Contents: Read and write**만 주세요.
+2. `/editor.html`에서 토큰을 붙여넣고 제목·요약·본문을 씁니다.
+3. **발행하기**를 누르면 커밋 3건이 생성됩니다.
+   - `posts/<slug>.html` 생성
+   - `index.html`의 `<!-- POSTS:START -->` 뒤에 목록 항목 삽입
+   - `feed.xml`의 `<!-- FEED:START -->` 뒤에 `<item>` 삽입
+
+> **마커 주석을 지우지 마세요.** `POSTS:START` / `FEED:START` 주석이 삽입 지점이라
+> 없어지면 발행이 실패합니다.
+
+본문은 마크다운 일부를 지원합니다 — `##` 제목, `**굵게**`, `*기울임*`, `` `코드` ``,
+```` ``` ```` 코드 블록, `-`/`1.` 목록, `>` 인용, `[링크](주소)`, `---` 구분선.
+입력은 모두 이스케이프되므로 본문에 HTML을 직접 넣을 수는 없습니다.
+
+### 토큰 취급
+
+`editor.html`은 **광고·분석 스크립트를 싣지 않고** `noindex`입니다.
+토큰이 서드파티 스크립트에 노출되지 않도록 의도한 설계이므로,
+이 페이지에 AdSense 슬롯을 추가하지 마세요.
+
+토큰은 체크박스를 켠 경우에만 `localStorage`에 저장되고 `api.github.com` 외에는
+전송되지 않습니다. 공용 PC에서는 저장하지 말고, 유출이 의심되면
+GitHub 설정에서 토큰을 폐기하세요.
+
+## 읽을거리 / 외부 링크
+
+홈의 `읽을거리` 섹션은 **실제 기사로 나가는 외부 링크**로 채워져 있습니다
 (2026년 8월, 각 항목에 출처 표시). 링크는 시간이 지나면 낡으므로 주기적으로
 갈아 끼우거나, 직접 쓴 글로 교체하세요.
 

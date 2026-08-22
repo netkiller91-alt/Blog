@@ -312,3 +312,96 @@ section { margin-top: 3.25rem; }
   .now-list li { grid-template-columns: 1fr; gap: 0; }
   .now-list span { padding-top: 0; }
 }
+
+/* ---- 글 본문 (posts/*.html) ---------------------------- */
+.post-date { font-family: var(--mono); font-size: .8rem; color: var(--ink-faint); margin-bottom: .5rem; }
+.post-body h1 { font-family: var(--serif); font-size: clamp(1.6rem, 4vw, 2.1rem); margin: 0 0 .6rem; }
+.post-lede { font-size: 1.02rem; color: var(--ink-soft); margin-bottom: 2rem; }
+.post-body h2 { font-size: 1.25rem; margin: 2.5rem 0 .7rem; }
+.post-body h3 { font-size: 1.08rem; margin: 2rem 0 .5rem; }
+.post-body h4 { font-size: .98rem; margin: 1.5rem 0 .4rem; }
+.post-body p { margin: 0 0 1.15em; }
+.post-body ul, .post-body ol { padding-left: 1.2rem; margin: 0 0 1.15em; }
+.post-body li { margin-bottom: .35rem; }
+.post-body hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.post-body blockquote {
+  margin: 0 0 1.15em; padding: .2rem 0 .2rem 1rem;
+  border-left: 2px solid var(--rule); color: var(--ink-faint);
+}
+.post-body code {
+  font-family: var(--mono); font-size: .86em;
+  background: var(--paper-2); padding: .1em .35em; border-radius: 3px;
+}
+.post-body pre {
+  background: var(--paper-2); border: 1px solid var(--rule);
+  padding: .9rem 1rem; overflow-x: auto; margin: 0 0 1.15em;
+  font-size: .86rem; line-height: 1.6;
+}
+.post-body pre code { background: none; padding: 0; font-size: inherit; }
+.post-body img { max-width: 100%; height: auto; }
+
+/* ---- 글쓰기 페이지 (editor.html) ----------------------- */
+.shell-wide { max-width: 52rem; }
+
+.editor-title { font-family: var(--serif); font-size: 1.6rem; margin: 0 0 .4rem; }
+.editor-lede { color: var(--ink-faint); font-size: .93rem; margin-bottom: 2rem; }
+
+.panel { border: 1px solid var(--rule); margin-bottom: 1.25rem; background: var(--paper); }
+.panel > summary, .panel-head {
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .02em;
+  color: var(--ink-faint); padding: .7rem 1rem; margin: 0;
+  border-bottom: 1px solid var(--rule); font-weight: 400;
+}
+.panel > summary { cursor: pointer; }
+.panel > summary:hover { color: var(--ink); }
+.panel-body { padding: 1rem; }
+
+.field { margin-bottom: 1rem; }
+.field:last-child { margin-bottom: 0; }
+.field label { display: block; font-size: .85rem; color: var(--ink-soft); margin-bottom: .3rem; }
+.field-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+.field-row .field { flex: 1 1 12rem; }
+
+.panel input[type="text"], .panel input[type="password"],
+.panel input[type="date"], .panel textarea {
+  width: 100%; padding: .5rem .6rem;
+  font-family: inherit; font-size: .95rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule);
+}
+.panel textarea { font-family: var(--mono); font-size: .88rem; line-height: 1.7; resize: vertical; }
+.panel input:focus, .panel textarea:focus { outline: 0; border-color: var(--ink-faint); }
+
+.check { display: flex; align-items: center; gap: .45rem; margin-top: .6rem; font-size: .88rem; color: var(--ink-soft); }
+.check input { width: auto; }
+
+.hint { font-size: .84rem; color: var(--ink-faint); margin: 0 0 .6rem; line-height: 1.6; }
+.hint code { font-family: var(--mono); font-size: .95em; background: var(--paper-2); padding: 0 .25em; }
+.hint.warn { margin: .6rem 0 0; }
+
+.linkbtn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: inherit; color: var(--link); text-decoration: underline; text-underline-offset: 2px;
+}
+
+.actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+.btn-primary, .btn-plain {
+  padding: .5rem 1.1rem; font: inherit; font-size: .92rem;
+  border: 1px solid var(--rule); cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn-primary:hover:not(:disabled) { opacity: .85; }
+.btn-primary:disabled { opacity: .45; cursor: default; }
+.btn-plain { background: transparent; color: var(--ink); }
+.btn-plain:hover { background: var(--paper-2); border-color: var(--ink-faint); }
+
+.log { list-style: none; margin: 1rem 0 0; padding: 0; font-family: var(--mono); font-size: .82rem; }
+.log li { padding: .25rem 0; color: var(--ink-soft); }
+.log li.is-ok { color: var(--ink); }
+.log li.is-error { color: #b3261e; }
+:root[data-theme="dark"] .log li.is-error { color: #f2938c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .log li.is-error { color: #f2938c; }
+}
+
+.empty-note { font-size: .9rem; color: var(--ink-faint); }
