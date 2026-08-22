@@ -97,8 +97,11 @@ python3 -m http.server 8000
 빌드 단계 없이 저장소 루트를 그대로 올립니다.
 
 - 공개 주소: <https://netkiller91-alt.github.io/desktop-tutorial/>
-- 워크플로의 `configure-pages` 단계가 Pages를 자동으로 켜므로,
-  Settings에서 따로 만질 것은 없습니다.
+- **최초 1회만** 저장소 Settings → Pages → Build and deployment →
+  Source를 `GitHub Actions`로 설정해야 합니다. `GITHUB_TOKEN`에는 Pages
+  사이트를 새로 생성할 권한이 없어서, 이 설정 없이 워크플로를 돌리면
+  `Create Pages site failed: Resource not accessible by integration`으로
+  실패합니다. 한 번 켜두면 이후로는 푸시만으로 배포됩니다.
 - 커스텀 도메인을 쓰려면 저장소 루트에 `CNAME` 파일을 추가하고
   Settings → Pages에서 도메인을 등록하세요.
 
