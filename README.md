@@ -103,6 +103,7 @@ python3 -m http.server 8000
   사이트를 새로 생성할 권한이 없어서, 이 설정 없이 워크플로를 돌리면
   `Create Pages site failed: Resource not accessible by integration`으로
   실패합니다. 한 번 켜두면 이후로는 푸시만으로 배포됩니다.
+
 ### 커스텀 도메인
 
 `demotetoprod.com`을 쓰도록 설정되어 있습니다 (저장소 루트의 `CNAME` 파일).
@@ -119,7 +120,12 @@ python3 -m http.server 8000
 DNS를 먼저 넣은 뒤 Settings → Pages에서 도메인을 확인하고
 **Enforce HTTPS**를 켜세요. 인증서 발급에 수 분~1시간이 걸립니다.
 
+DNS를 Cloudflare에서 관리하고 프록시(주황색 구름)를 켠다면,
+SSL/TLS 암호화 모드를 `Automatic` 또는 `Full (strict)`로 두어야 합니다.
+`Flexible`이면 Cloudflare가 오리진에 HTTP로 요청하고 GitHub이 HTTPS로
+돌려보내면서 무한 리다이렉트(`ERR_TOO_MANY_REDIRECTS`)가 발생합니다.
+인증서를 처음 발급받을 때는 프록시를 꺼 두어야 검증이 통과합니다.
+
 ## 남은 연결 작업
 
-- 인사말의 GitHub 링크를 실제 프로필 주소로 교체하세요.
 - 인사말과 `요즘` 섹션 내용은 예시 문구입니다. 본인 이야기로 바꾸세요.
