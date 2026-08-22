@@ -51,7 +51,14 @@
     el.textContent = String(new Date().getFullYear());
   });
 
-  /* ---- 3. Google AdSense -------------------------------- */
+  /* ---- 3. 글 목록 비어 있음 안내 -------------------------- */
+  var postList = document.getElementById("post-list");
+  var emptyNote = document.querySelector(".empty-note");
+  if (postList && emptyNote && postList.querySelectorAll("li").length === 0) {
+    emptyNote.hidden = false;
+  }
+
+  /* ---- 4. Google AdSense -------------------------------- */
   var client = (CONFIG.adsenseClient || "").trim();
   var slots = CONFIG.adSlots || {};
   var slotEls = document.querySelectorAll(".ad-slot");

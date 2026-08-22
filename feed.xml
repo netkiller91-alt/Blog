@@ -11,15 +11,9 @@
     <language>ko</language>
     <atom:link href="https://demotetoprod.com/feed.xml" rel="self" type="application/rss+xml" />
 
-    <!-- 아직 발행한 글이 없습니다. 첫 글을 쓰면 아래 형식으로 <item>을 추가하세요.
-
-    <item>
-      <title>글 제목</title>
-      <link>https://demotetoprod.com/posts/글-주소.html</link>
-      <guid isPermaLink="true">https://demotetoprod.com/posts/글-주소.html</guid>
-      <pubDate>Mon, 01 Sep 2026 09:00:00 +0900</pubDate>
-      <description>한 줄 요약.</description>
-    </item>
-    -->
+    <!-- editor.html이 아래 마커 바로 뒤에 <item>을 끼워 넣습니다.
+         마커를 지우면 글 발행 시 피드 갱신이 실패합니다. -->
+<!-- FEED:START -->
+<!-- FEED:END -->
   </channel>
 </rss>

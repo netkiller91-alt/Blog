@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /editor.html
 
 # Google AdSense 크롤러
 User-agent: Mediapartners-Google
