@@ -61,6 +61,15 @@
       </div>
     </details>
 
+    <!-- ── 탭 ───────────────────────────────────────────── -->
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab is-active" data-tab="post" role="tab" aria-selected="true">새 글</button>
+      <button type="button" class="tab" data-tab="intro" role="tab" aria-selected="false">인사말</button>
+      <button type="button" class="tab" data-tab="now" role="tab" aria-selected="false">요즘</button>
+    </div>
+
+    <div id="pane-post">
+
     <!-- ── 작성 ─────────────────────────────────────────── -->
     <section class="panel">
       <h2 class="panel-head">2. 내용</h2>
@@ -124,6 +133,68 @@
         <ol class="log" id="log" aria-live="polite"></ol>
       </div>
     </section>
+
+    </div><!-- /pane-post -->
+
+    <!-- ── 인사말 ───────────────────────────────────────── -->
+    <div id="pane-intro" hidden>
+      <section class="panel">
+        <h2 class="panel-head">인사말 수정</h2>
+        <div class="panel-body">
+          <p class="hint">
+            홈 맨 위 문단입니다. 원본은 <code>content/intro.md</code>에 있고,
+            저장하면 홈의 해당 구간이 다시 렌더링됩니다.
+            글 본문과 같은 마크다운을 쓰며, <code>*강조*</code>는 형광펜 표시가 됩니다.
+            아래 링크 줄(GitHub · LinkedIn · 메일 · RSS)은 편집 대상이 아닙니다.
+          </p>
+          <textarea id="intro-body" rows="14" spellcheck="false"></textarea>
+          <div class="actions">
+            <button type="button" id="intro-load" class="btn-plain">현재 내용 불러오기</button>
+            <button type="button" id="intro-save" class="btn-primary">저장하기</button>
+          </div>
+          <ol class="log" id="intro-log" aria-live="polite"></ol>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-head">미리보기</h2>
+        <div class="panel-body">
+          <div class="intro" id="intro-preview">
+            <p class="hint">불러오거나 입력하면 여기에 표시됩니다.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ── 요즘 ─────────────────────────────────────────── -->
+    <div id="pane-now" hidden>
+      <section class="panel">
+        <h2 class="panel-head">요즘 수정</h2>
+        <div class="panel-body">
+          <p class="hint">
+            한 줄에 <code>라벨: 내용</code> 형식으로 씁니다. 줄 수는 자유입니다.
+            <code>---</code> 아래 한 줄은 목록 밑에 붙는 작은 설명입니다.
+            원본은 <code>content/now.md</code>에 있습니다.
+          </p>
+          <textarea id="now-body" rows="10" spellcheck="false"
+            placeholder="하는 일: ...&#10;보는 것: ...&#10;&#10;---&#10;2026년 8월 기준. 가끔 갱신합니다."></textarea>
+          <div class="actions">
+            <button type="button" id="now-load" class="btn-plain">현재 내용 불러오기</button>
+            <button type="button" id="now-save" class="btn-primary">저장하기</button>
+          </div>
+          <ol class="log" id="now-log" aria-live="polite"></ol>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-head">미리보기</h2>
+        <div class="panel-body">
+          <div class="now" id="now-preview">
+            <p class="hint">불러오거나 입력하면 여기에 표시됩니다.</p>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="colophon">

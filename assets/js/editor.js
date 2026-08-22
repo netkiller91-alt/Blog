@@ -404,6 +404,140 @@ html + '\n' +
     });
   }
 
+  /* ---- 섹션 편집 (인사말 / 요즘) ------------------------- */
+
+  // "라벨: 내용" 줄들 + (--- 뒤) 설명 한 줄 → 요즘 섹션 HTML
+  function renderNow(src) {
+    var parts = String(src).replace(/\r\n?/g, "\n").split(/^\s*---\s*$/m);
+    var rows = parts[0].split("\n").filter(function (l) { return l.trim(); });
+    var note = (parts[1] || "").trim();
+
+    var items = rows.map(function (line) {
+      var idx = line.indexOf(":");
+      if (idx === -1) {
+        return "        <li><span></span> " + inline(escapeHtml(line.trim())) + "</li>";
+      }
+      return "        <li><span>" + escapeHtml(line.slice(0, idx).trim()) + "</span> " +
+        inline(escapeHtml(line.slice(idx + 1).trim())) + "</li>";
+    });
+
+    var html = '      <ul class="now-list">\n' + items.join("\n") + "\n      </ul>";
+    if (note) html += '\n      <p class="now-note">' + inline(escapeHtml(note)) + "</p>";
+    return html;
+  }
+
+  // 마커 사이 구간만 통째로 교체합니다.
+  function replaceBetween(text, name, replacement) {
+    var start = "<!-- " + name + ":START -->";
+    var end = "<!-- " + name + ":END -->";
+    var a = text.indexOf(start);
+    var b = text.indexOf(end);
+    if (a === -1 || b === -1 || b < a) {
+      throw new Error("index.html에서 " + name + " 마커를 찾지 못했습니다.");
+    }
+    return text.slice(0, a + start.length) + "\n" + replacement + "\n" + text.slice(b);
+  }
+
+  // 섹션 편집기 하나를 구성합니다.
+  function section(opts) {
+    var ta = $(opts.id + "-body");
+    var previewEl = $(opts.id + "-preview");
+    var logEl2 = $(opts.id + "-log");
+
+    function say(msg, state) {
+      var li = document.createElement("li");
+      li.textContent = msg;
+      if (state) li.className = "is-" + state;
+      logEl2.appendChild(li);
+      return li;
+    }
+
+    function refresh() {
+      previewEl.innerHTML = ta.value.trim()
+        ? opts.render(ta.value)
+        : '<p class="hint">불러오거나 입력하면 여기에 표시됩니다.</p>';
+    }
+    ta.addEventListener("input", refresh);
+
+    function load() {
+      logEl2.innerHTML = "";
+      if (!token()) { say("토큰을 먼저 입력하세요.", "error"); $("auth-panel").open = true; return; }
+      say("불러오는 중…");
+      getFile(opts.path).then(function (f) {
+        ta.value = f.text;
+        refresh();
+        logEl2.innerHTML = "";
+        say("불러왔습니다.", "ok");
+      }).catch(function (err) {
+        say("불러오지 못했습니다: " + err.message, "error");
+      });
+    }
+
+    function save() {
+      logEl2.innerHTML = "";
+      if (!token()) { say("토큰을 먼저 입력하세요.", "error"); $("auth-panel").open = true; return; }
+      if (!ta.value.trim()) { say("내용이 비어 있습니다.", "error"); return; }
+
+      var btn = $(opts.id + "-save");
+      btn.disabled = true;
+      var rendered = opts.render(ta.value);
+
+      say("① 원본을 저장하는 중… (" + opts.path + ")");
+      getFile(opts.path).then(
+        function (f) { return f.sha; },
+        function () { return null; }
+      ).then(function (sha) {
+        return putFile(opts.path, ta.value, "Update " + opts.label, sha);
+      }).then(function () {
+        say("① 완료", "ok");
+        say("② 홈에 반영하는 중…");
+        return getFile("index.html");
+      }).then(function (f) {
+        return putFile("index.html", replaceBetween(f.text, opts.marker, rendered),
+          "Render " + opts.label + " into home", f.sha);
+      }).then(function () {
+        say("② 완료", "ok");
+        say("저장했습니다. 배포까지 1분쯤 걸립니다.", "ok");
+      }).catch(function (err) {
+        say("실패: " + err.message, "error");
+      }).then(function () {
+        btn.disabled = false;
+      });
+    }
+
+    $(opts.id + "-load").addEventListener("click", load);
+    $(opts.id + "-save").addEventListener("click", save);
+    return { load: load, loaded: function () { return !!ta.value.trim(); } };
+  }
+
+  var sections = {
+    intro: section({
+      id: "intro", path: "content/intro.md", marker: "INTRO",
+      label: "intro", render: renderMarkdown
+    }),
+    now: section({
+      id: "now", path: "content/now.md", marker: "NOW",
+      label: "now", render: renderNow
+    })
+  };
+
+  /* ---- 탭 ----------------------------------------------- */
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.dataset.tab;
+      Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (b) {
+        var on = b === btn;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      ["post", "intro", "now"].forEach(function (n) {
+        $("pane-" + n).hidden = n !== name;
+      });
+      // 처음 열 때 현재 내용을 자동으로 불러옵니다.
+      if (sections[name] && !sections[name].loaded() && token()) sections[name].load();
+    });
+  });
+
   /* ---- 이벤트 ------------------------------------------- */
   var preview = $("preview");
   function refreshPreview() {
