@@ -15,6 +15,7 @@ assets/js/main.js     테마 전환, AdSense 로더
 ads.txt               AdSense 게시자 인증 파일 (승인 후 값 입력)
 robots.txt            크롤러 정책 (Mediapartners-Google 허용)
 sitemap.xml           사이트맵
+CNAME                 커스텀 도메인 (demotetoprod.com)
 .nojekyll             GitHub Pages의 Jekyll 처리 비활성화
 ```
 
@@ -58,9 +59,9 @@ python3 -m http.server 8000
    ```
 
 3. `ads.txt`의 주석을 해제하고 게시자 ID를 본인 것으로 교체합니다.
-4. 사이트 주소는 `https://netkiller91-alt.github.io/desktop-tutorial/`로 설정되어 있습니다.
-   커스텀 도메인을 붙였다면 `robots.txt`, `sitemap.xml`, `feed.xml`,
-   `index.html`의 `canonical`/`og:url`을 새 주소로 바꾸세요.
+4. 사이트 주소는 `https://demotetoprod.com/`로 설정되어 있습니다.
+   도메인을 다시 바꾸면 `CNAME`과 함께 `robots.txt`, `sitemap.xml`,
+   `feed.xml`, `index.html`의 `canonical`/`og:url`도 같이 고쳐야 합니다.
 
 `adsenseClient`가 비어 있으면 AdSense 스크립트를 아예 로드하지 않으므로,
 승인 전에도 콘솔 오류 없이 사이트를 운영할 수 있습니다.
@@ -96,14 +97,27 @@ python3 -m http.server 8000
 `main`에 푸시하면 `.github/workflows/pages.yml`이 자동으로 배포합니다.
 빌드 단계 없이 저장소 루트를 그대로 올립니다.
 
-- 공개 주소: <https://netkiller91-alt.github.io/desktop-tutorial/>
+- 공개 주소: <https://demotetoprod.com/>
 - **최초 1회만** 저장소 Settings → Pages → Build and deployment →
   Source를 `GitHub Actions`로 설정해야 합니다. `GITHUB_TOKEN`에는 Pages
   사이트를 새로 생성할 권한이 없어서, 이 설정 없이 워크플로를 돌리면
   `Create Pages site failed: Resource not accessible by integration`으로
   실패합니다. 한 번 켜두면 이후로는 푸시만으로 배포됩니다.
-- 커스텀 도메인을 쓰려면 저장소 루트에 `CNAME` 파일을 추가하고
-  Settings → Pages에서 도메인을 등록하세요.
+### 커스텀 도메인
+
+`demotetoprod.com`을 쓰도록 설정되어 있습니다 (저장소 루트의 `CNAME` 파일).
+도메인 등록기관 DNS에 아래 레코드가 있어야 합니다.
+
+| 타입 | 이름 | 값 |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `netkiller91-alt.github.io` |
+
+DNS를 먼저 넣은 뒤 Settings → Pages에서 도메인을 확인하고
+**Enforce HTTPS**를 켜세요. 인증서 발급에 수 분~1시간이 걸립니다.
 
 ## 남은 연결 작업
 
