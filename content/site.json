@@ -6,11 +6,26 @@
   "lang": "ko",
   "email": "netkiller91@gmail.com",
   "links": [
-    { "label": "GitHub", "href": "https://github.com/netkiller91-alt", "me": true },
-    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/ryan-cho4556/", "me": true }
+    {
+      "label": "GitHub",
+      "href": "https://github.com/netkiller91-alt",
+      "me": true
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/ryan-cho4556/",
+      "me": true
+    }
   ],
   "adsense": {
     "client": "",
-    "slots": { "top": "", "inFeed": "", "footer": "" }
+    "slots": {
+      "top": "",
+      "inFeed": "",
+      "footer": ""
+    }
+  },
+  "admin": {
+    "oauth": ""
   }
 }

@@ -40,23 +40,41 @@
 
     <!-- ── 인증 ─────────────────────────────────────────── -->
     <details class="panel" id="auth-panel" open>
-      <summary>GitHub 토큰</summary>
+      <summary id="auth-summary">로그인</summary>
       <div class="panel-body">
-        <p class="hint">
-          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Fine-grained 토큰</a>을
-          만들어 붙여넣으세요. Repository access는 <strong>이 저장소 하나</strong>,
-          권한은 <strong>Contents: Read and write</strong>만 있으면 됩니다.
-        </p>
-        <label class="sr-only" for="token">GitHub 토큰</label>
-        <input id="token" type="password" placeholder="github_pat_..." autocomplete="off" spellcheck="false" />
+
+        <div id="oauth-box" hidden>
+          <div class="actions">
+            <button type="button" class="btn-primary" id="oauth-login">GitHub으로 로그인</button>
+            <button type="button" class="btn-plain" id="oauth-logout" hidden>로그아웃</button>
+          </div>
+          <p class="hint" id="oauth-hint">
+            팝업이 열립니다. 차단되면 주소창 옆의 팝업 허용을 눌러 주세요.
+          </p>
+        </div>
+
+        <details id="manual-box">
+          <summary class="linkbtn">토큰 직접 입력</summary>
+          <div style="padding-top:.75rem">
+            <p class="hint">
+              <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Fine-grained 토큰</a>을
+              만들어 붙여넣으세요. Repository access는 <strong>이 저장소 하나</strong>,
+              권한은 <strong>Contents: Read and write</strong>만 있으면 됩니다.
+            </p>
+            <label class="sr-only" for="token">GitHub 토큰</label>
+            <input id="token" type="password" placeholder="github_pat_..." autocomplete="off" spellcheck="false" />
+          </div>
+        </details>
+
         <label class="check">
           <input id="remember" type="checkbox" />
           이 브라우저에 저장 (localStorage)
         </label>
         <p class="hint warn">
-          토큰은 <code>api.github.com</code> 외에는 어디로도 전송되지 않습니다.
+          체크하지 않으면 탭을 닫을 때까지만 유지됩니다.
+          자격 증명은 <code>api.github.com</code> 외에는 어디로도 전송되지 않습니다.
           공용 PC라면 저장하지 마세요.
-          <button type="button" class="linkbtn" id="forget">저장된 토큰 지우기</button>
+          <button type="button" class="linkbtn" id="forget">저장된 자격 증명 지우기</button>
         </p>
         <p class="log-line" id="auth-state"></p>
       </div>

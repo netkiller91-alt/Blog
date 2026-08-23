@@ -17,6 +17,7 @@ content/              ← 원본은 전부 여기에 있습니다
   media/                올린 사진
 build/build.mjs       정적 사이트 생성기 (의존성 없음)
 admin/                브라우저 관리 화면 (noindex, 광고 없음)
+oauth/                GitHub 로그인용 Cloudflare Worker (선택)
 assets/css/style.css  스타일
 assets/js/main.js     테마 전환, AdSense 로더
 assets/js/markdown.mjs 마크다운 렌더러 (빌드와 관리 화면이 공유)
@@ -30,10 +31,23 @@ _site/                빌드 산출물 — 커밋하지 않습니다
 
 홈 푸터의 **글쓰기** 링크, 또는 <https://demotetoprod.com/admin/> 로 들어갑니다.
 
-1. [Fine-grained 토큰](https://github.com/settings/personal-access-tokens/new)을
-   발급합니다. Repository access는 **이 저장소 하나**,
-   권한은 **Contents: Read and write** 만 주세요.
-2. 토큰을 붙여넣으면 글 목록이 뜹니다.
+로그인 방법은 두 가지입니다.
+
+**GitHub으로 로그인 (권장)** — `oauth/` 의 Cloudflare Worker 를 배포하고
+`content/site.json` 의 `admin.oauth` 에 주소를 넣으면 버튼이 나타납니다.
+버튼 한 번이면 끝이고 토큰을 다룰 일이 없습니다. 설정은 [oauth/README.md](oauth/README.md).
+
+**토큰 직접 입력** — Worker 없이 바로 쓸 수 있는 방법입니다.
+[Fine-grained 토큰](https://github.com/settings/personal-access-tokens/new)을 발급하되
+Repository access는 **이 저장소 하나**, 권한은 **Contents: Read and write** 만 주세요.
+
+어느 쪽이든 `이 브라우저에 저장`을 체크하면 그 기기에서는 다시 입력할 필요가 없고,
+체크하지 않으면 탭을 닫을 때까지만 유지됩니다.
+
+> 정적 사이트라 서버 세션이 없고, `demotetoprod.com` 은 `github.com` 과 다른
+> 오리진이라 GitHub 로그인 상태를 그대로 쓸 수 없습니다. 그래서 저장소에 쓰려면
+> 어떤 형태로든 자격 증명이 필요합니다 — 위 두 방법의 차이는 그 증명을
+> 손으로 넣느냐, 버튼으로 받아 오느냐입니다.
 
 | 탭 | 하는 일 |
 | --- | --- |

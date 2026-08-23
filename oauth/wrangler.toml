@@ -1,0 +1,10 @@
+name = "blog-oauth"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# 공개해도 되는 값만 여기에 둡니다.
+# CLIENT_SECRET 은 반드시 secret 으로 넣으세요 (아래 README 참고).
+[vars]
+SITE_ORIGIN = "https://demotetoprod.com"
+OAUTH_SCOPE = "public_repo"
+# GITHUB_CLIENT_ID = "Iv1....."   ← 대시보드나 wrangler 로 설정

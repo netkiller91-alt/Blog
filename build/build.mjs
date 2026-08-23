@@ -414,6 +414,19 @@ async function build() {
   // 그대로 복사되는 것들
   await cp(path.join(ROOT, "assets"), path.join(OUT, "assets"), { recursive: true });
   await cp(path.join(ROOT, "admin"), path.join(OUT, "admin"), { recursive: true });
+
+  // 관리 화면 설정은 site.json 한 곳에서만 관리합니다.
+  const adminIndex = path.join(OUT, "admin", "index.html");
+  const adminHtml = (await readFile(adminIndex, "utf8")).replace(
+    /window\.ADMIN_CONFIG = \{[\s\S]*?\};/,
+    `window.ADMIN_CONFIG = ${JSON.stringify({
+      owner: site.repo?.owner || "netkiller91-alt",
+      repo: site.repo?.name || "Blog",
+      branch: site.repo?.branch || "main",
+      oauth: site.admin?.oauth || ""
+    }, null, 2)};`
+  );
+  await writeFile(adminIndex, adminHtml);
   if (existsSync(path.join(CONTENT, "media"))) {
     await cp(path.join(CONTENT, "media"), path.join(OUT, "content", "media"), { recursive: true });
   }
