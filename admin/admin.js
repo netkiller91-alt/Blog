@@ -363,8 +363,25 @@ function fileSection({ id, path, label, render }) {
   const ta = $(`${id}-body`);
   const log = logger(`${id}-log`);
   const preview = $(`${id}-preview`);
+  const saveBtn = $(`${id}-save`);
+  const stateEl = $(`${id}-state`);
   let sha = null;
   let loaded = false;
+
+  // 현재 내용을 불러오기 전에는 입력과 저장을 잠급니다.
+  // 빈 칸에 쓴 내용으로 기존 파일을 통째로 덮어쓰는 사고를 막기 위해서입니다.
+  function setLocked(message) {
+    loaded = false;
+    ta.disabled = true;
+    saveBtn.disabled = true;
+    if (stateEl) stateEl.textContent = message;
+  }
+  function setReady() {
+    loaded = true;
+    ta.disabled = false;
+    saveBtn.disabled = false;
+    if (stateEl) stateEl.textContent = "";
+  }
 
   function refresh() {
     if (!preview) return;
@@ -376,15 +393,22 @@ function fileSection({ id, path, label, render }) {
 
   async function load() {
     log.clear();
-    if (!token()) { log.say("토큰을 먼저 입력하세요.", "error"); $("auth-panel").open = true; return; }
+    if (!token()) {
+      setLocked("토큰을 입력하면 현재 내용을 불러옵니다.");
+      log.say("토큰을 먼저 입력하세요.", "error");
+      $("auth-panel").open = true;
+      return;
+    }
+    if (stateEl) stateEl.textContent = "불러오는 중…";
     try {
       const f = await getFile(path);
       ta.value = f.text;
       sha = f.sha;
-      loaded = true;
+      setReady();
       refresh();
       log.say("불러왔습니다.", "ok");
     } catch (err) {
+      setLocked("불러오지 못해 편집이 잠겨 있습니다. 다시 불러오기를 눌러 주세요.");
       log.say(`불러오지 못했습니다: ${err.message}`, "error");
     }
   }
@@ -392,8 +416,9 @@ function fileSection({ id, path, label, render }) {
   async function save() {
     log.clear();
     if (!token()) { log.say("토큰을 먼저 입력하세요.", "error"); $("auth-panel").open = true; return; }
+    if (!loaded) { log.say("현재 내용을 불러온 뒤에 저장할 수 있습니다.", "error"); return; }
     if (!ta.value.trim()) { log.say("내용이 비어 있습니다.", "error"); return; }
-    const btn = $(`${id}-save`);
+    const btn = saveBtn;
     btn.disabled = true;
     try {
       if (!sha) { try { sha = (await getFile(path)).sha; } catch { sha = null; } }
@@ -451,29 +476,122 @@ document.querySelectorAll(".tab").forEach((btn) => {
 
 function rememberToken() {
   try {
-    if ($("remember").checked && token()) localStorage.setItem(TOKEN_KEY, token());
-    else localStorage.removeItem(TOKEN_KEY);
+    if ($("remember").checked && token()) {
+      localStorage.setItem(TOKEN_KEY, token());
+      sessionStorage.removeItem(TOKEN_KEY);
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+      // 체크를 풀면 탭을 닫을 때까지만 유지합니다.
+      if (token()) sessionStorage.setItem(TOKEN_KEY, token());
+    }
   } catch { $("auth-state").textContent = "브라우저 저장소를 쓸 수 없습니다."; }
 }
 $("remember").addEventListener("change", rememberToken);
-$("token").addEventListener("change", () => { rememberToken(); loadPostList(); });
+function activeTab() {
+  return document.querySelector(".tab.is-active")?.dataset.tab || "posts";
+}
+
+// 자격 증명이 생긴 직후에 공통으로 하는 일.
+function afterAuth() {
+  loadPostList();
+  // 토큰을 넣기 전에 열어둔 탭이 빈 채로 남지 않도록 함께 불러옵니다.
+  const tab = activeTab();
+  if (sections[tab] && !sections[tab].isLoaded()) sections[tab].load();
+}
+
+$("token").addEventListener("change", () => {
+  rememberToken();
+  afterAuth();
+});
 $("forget").addEventListener("click", () => {
-  try { localStorage.removeItem(TOKEN_KEY); } catch { /* 무시 */ }
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+  } catch { /* 무시 */ }
   $("token").value = "";
   $("remember").checked = false;
-  $("auth-state").textContent = "저장된 토큰을 지웠습니다.";
+  setLoggedIn(false);
+  $("auth-state").textContent = "저장된 자격 증명을 지웠습니다.";
 });
+
+/* ============================================================
+   GitHub 로그인 (OAuth)
+
+   정적 사이트라 client secret 을 둘 수 없어서, code → token 교환만
+   oauth/worker.js 가 대신합니다. 토큰은 postMessage 로만 건네받습니다.
+   ============================================================ */
+const OAUTH_BASE = (CFG.oauth || "").replace(/\/$/, "");
+
+function setLoggedIn(on) {
+  if (!OAUTH_BASE) return;
+  $("oauth-login").hidden = on;
+  $("oauth-logout").hidden = !on;
+  $("manual-box").hidden = on;
+  $("oauth-hint").textContent = on
+    ? "GitHub 계정으로 로그인되어 있습니다."
+    : "팝업이 열립니다. 차단되면 주소창 옆의 팝업 허용을 눌러 주세요.";
+  // 로그인 후에는 패널이 접히므로, 접힌 상태에서도 상태와 로그아웃 위치를 알 수 있게 합니다.
+  const summary = $("auth-summary");
+  if (summary) summary.textContent = on ? "로그인됨 — 누르면 로그아웃" : "로그인";
+}
+
+function startOAuth() {
+  const popup = window.open(
+    `${OAUTH_BASE}/auth`, "github-oauth",
+    "width=720,height=760,menubar=no,toolbar=no"
+  );
+  if (!popup) {
+    $("auth-state").textContent = "팝업이 차단되었습니다. 허용한 뒤 다시 눌러 주세요.";
+    return;
+  }
+  $("auth-state").textContent = "GitHub 인증 창을 기다리는 중…";
+
+  function onMessage(event) {
+    // 우리 Worker 가 보낸 메시지만 받습니다.
+    if (event.origin !== OAUTH_BASE) return;
+    if (!event.data || event.data.source !== "github-oauth") return;
+    window.removeEventListener("message", onMessage);
+
+    if (event.data.error) {
+      $("auth-state").textContent = `로그인 실패: ${event.data.error}`;
+      return;
+    }
+    $("token").value = event.data.token;
+    rememberToken();
+    setLoggedIn(true);
+    $("auth-state").textContent = event.data.expiresIn
+      ? `로그인되었습니다. ${Math.round(event.data.expiresIn / 3600)}시간 뒤 만료됩니다.`
+      : "로그인되었습니다.";
+    $("auth-panel").open = false;
+    afterAuth();
+  }
+  window.addEventListener("message", onMessage);
+}
+
+if (OAUTH_BASE) {
+  $("oauth-box").hidden = false;
+  $("oauth-login").addEventListener("click", startOAuth);
+  $("oauth-logout").addEventListener("click", () => $("forget").click());
+} else {
+  // 로그인 버튼이 없으면 토큰 입력이 유일한 방법이므로 접어 두지 않습니다.
+  $("manual-box").open = true;
+  $("manual-box").querySelector("summary").hidden = true;
+}
 
 /* ---- 초기 상태 ------------------------------------------- */
 $("date").value = new Date().toISOString().slice(0, 10);
 try {
-  const saved = localStorage.getItem(TOKEN_KEY);
-  if (saved) {
-    $("token").value = saved;
-    $("remember").checked = true;
+  const stored = localStorage.getItem(TOKEN_KEY);
+  const session = sessionStorage.getItem(TOKEN_KEY);
+  if (stored || session) {
+    $("token").value = stored || session;
+    $("remember").checked = !!stored;
     $("auth-panel").open = false;
+    setLoggedIn(true);
+  } else {
+    setLoggedIn(false);
   }
 } catch { /* 접근 불가 시 무시 */ }
 
-// 토큰이 이미 있을 때만 불러옵니다. 없으면 토큰 입력 시점에 한 번만 돕니다.
-if (token()) loadPostList();
+// 자격 증명이 이미 있을 때만 불러옵니다. 없으면 로그인 시점에 한 번만 돕니다.
+if (token()) afterAuth();
