@@ -419,3 +419,48 @@ section { margin-top: 3.25rem; }
 
 /* 편집기 안 미리보기에서는 섹션 상단 여백을 없앱니다. */
 .panel-body > .intro, .panel-body > .now { margin-top: 0; }
+
+/* ---- 본문 그림 ----------------------------------------- */
+.post-body figure { margin: 1.6rem 0; }
+.post-body figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+.post-body .tag {
+  font-family: var(--mono); font-size: .72rem; color: var(--ink-faint);
+  border: 1px solid var(--rule); padding: .05rem .35rem;
+}
+.post-nav {
+  display: flex; justify-content: space-between; gap: 1rem;
+  margin: 2.5rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--rule);
+  font-size: .9rem;
+}
+.post-nav a { flex: 0 1 48%; }
+.post-nav a:last-child { text-align: right; }
+
+/* ---- 관리 화면 ----------------------------------------- */
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.head-action { font-family: var(--sans); font-size: .85rem; }
+
+.admin-list { list-style: none; margin: 0; padding: 0; }
+.admin-list li { padding: .45rem 0; border-top: 1px solid var(--rule); font-size: .93rem; }
+.admin-list li:first-child { border-top: 0; }
+.admin-list .linkbtn { font-family: var(--mono); font-size: .85rem; text-align: left; }
+.admin-list li.is-error { color: #b3261e; }
+
+.actions .spacer { flex: 1 1 auto; }
+.file-btn { display: inline-flex; align-items: center; cursor: pointer; }
+.btn-plain.danger { color: #b3261e; border-color: #e6c3bf; }
+.btn-plain.danger:hover { background: #fdf2f1; }
+:root[data-theme="dark"] .btn-plain.danger { color: #f2938c; border-color: #4a2b28; }
+:root[data-theme="dark"] .btn-plain.danger:hover { background: #2a1a18; }
+
+.dropzone { position: relative; }
+.dropzone.is-over textarea { border-color: var(--ink); border-style: dashed; }
+.dropzone-hint {
+  display: none; position: absolute; inset: 0; margin: 0;
+  align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  font-family: var(--mono); font-size: .85rem; color: var(--ink-faint);
+  pointer-events: none;
+}
+.dropzone.is-over .dropzone-hint { display: flex; }
+
+.log-line { margin: .6rem 0 0; font-family: var(--mono); font-size: .82rem; color: var(--ink-faint); }

@@ -1,0 +1,16 @@
+{
+  "title": "AI Engineering Notes",
+  "description": "LLM 제품을 만들면서 남기는 기록. RAG, 에이전트, 평가, 서빙 비용에 대한 개인 노트.",
+  "shortDescription": "LLM 제품을 만들면서 남기는 기록.",
+  "url": "https://demotetoprod.com",
+  "lang": "ko",
+  "email": "netkiller91@gmail.com",
+  "links": [
+    { "label": "GitHub", "href": "https://github.com/netkiller91-alt", "me": true },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/ryan-cho4556/", "me": true }
+  ],
+  "adsense": {
+    "client": "",
+    "slots": { "top": "", "inFeed": "", "footer": "" }
+  }
+}

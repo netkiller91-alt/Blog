@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# 배포는 한 번에 하나만. 진행 중인 배포를 취소하지 않고 큐에 넣습니다.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -24,15 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # content/ 를 읽어 _site/ 를 만듭니다. 외부 의존성은 없습니다.
+      - name: Build site
+        run: node build/build.mjs
+
       # Pages 사이트 자체는 Settings에서 한 번 켜야 합니다
       # (Settings → Pages → Source → GitHub Actions).
-      # GITHUB_TOKEN에는 사이트를 새로 생성할 권한이 없어 enablement는 쓰지 않습니다.
       - uses: actions/configure-pages@v5
 
-      # 빌드 단계가 없는 정적 사이트라 저장소 루트를 그대로 올립니다.
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - id: deployment
         uses: actions/deploy-pages@v4
