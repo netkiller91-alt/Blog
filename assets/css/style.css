@@ -464,3 +464,9 @@ section { margin-top: 3.25rem; }
 .dropzone.is-over .dropzone-hint { display: flex; }
 
 .log-line { margin: .6rem 0 0; font-family: var(--mono); font-size: .82rem; color: var(--ink-faint); }
+
+/* 섹션 편집기가 아직 내용을 못 불러왔을 때 */
+.hint.state:empty { display: none; }
+.panel textarea:disabled {
+  background: var(--paper-2); color: var(--ink-faint); cursor: not-allowed;
+}
