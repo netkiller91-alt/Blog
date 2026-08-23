@@ -1,0 +1,40 @@
+name: Build check
+
+# 배포가 빌드에 의존하므로, PR 단계에서 빌드가 깨졌는지 먼저 잡습니다.
+# 여기서 통과하지 못하면 main에 올라가도 배포가 실패합니다.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build site
+        run: node build/build.mjs
+
+      - name: Check generated XML is well-formed
+        run: |
+          python3 -c "
+          import xml.dom.minidom, sys
+          for f in ['_site/feed.xml', '_site/sitemap.xml']:
+              xml.dom.minidom.parse(f)
+              print(f, 'ok')
+          "
+
+      - name: Check expected files exist
+        run: |
+          for f in _site/index.html _site/privacy.html _site/feed.xml \
+                   _site/sitemap.xml _site/admin/index.html _site/CNAME; do
+            test -f "$f" || { echo "빠진 파일: $f"; exit 1; }
+          done
+          echo "필수 파일 확인 완료"

@@ -86,6 +86,10 @@ python3 -m http.server 8000 --directory _site
 `main`에 푸시하면 `.github/workflows/pages.yml`이 `node build/build.mjs`
 를 돌려 `_site/` 를 만들고 배포합니다. 외부 패키지를 설치하지 않아 20초쯤 걸립니다.
 
+PR에서는 `build-check.yml`이 같은 빌드를 돌려 결과물이 제대로 나오는지
+먼저 확인합니다. 배포가 빌드에 의존하므로, 깨진 빌드를 main에 올리기 전에
+잡으려는 목적입니다.
+
 - 공개 주소: <https://demotetoprod.com/>
 - **최초 1회만** 저장소 Settings → Pages → Build and deployment →
   Source를 `GitHub Actions`로 설정해야 합니다. `GITHUB_TOKEN`에는 Pages
