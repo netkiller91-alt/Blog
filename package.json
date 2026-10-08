@@ -1,0 +1,17 @@
+{
+  "name": "ai-browser",
+  "private": true,
+  "type": "module",
+  "description": "페이지를 읽기 모드로 열고 Claude에게 요약·질문·웹 검색을 맡기는 웹 기반 AI 브라우저",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --serve",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.127.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  }
+}

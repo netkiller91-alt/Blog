@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AI 브라우저</title>
+  <meta name="description" content="페이지를 읽기 모드로 열고, Claude에게 요약·질문·웹 검색을 맡기는 AI 브라우저." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#16171a" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d9643a'/%3E%3Cpath d='M16 6l2.6 7.4L26 16l-7.4 2.6L16 26l-2.6-7.4L6 16l7.4-2.6z' fill='white'/%3E%3C/svg%3E" />
+  <link rel="search" type="application/opensearchdescription+xml" title="AI 브라우저" href="/opensearch.xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="chrome">
+    <div class="tabs">
+      <div id="tabstrip" class="tabstrip" role="tablist" aria-label="탭"></div>
+      <button id="new-tab" class="icon-btn" aria-label="새 탭 (Alt+T)" title="새 탭 (Alt+T)">＋</button>
+    </div>
+    <nav class="toolbar">
+      <button id="back" class="icon-btn" aria-label="뒤로 (Alt+←)" title="뒤로 (Alt+←)">←</button>
+      <button id="forward" class="icon-btn" aria-label="앞으로 (Alt+→)" title="앞으로 (Alt+→)">→</button>
+      <button id="reload" class="icon-btn" aria-label="새로 고침" title="새로 고침">↻</button>
+      <form id="omnibox" class="omnibox" role="search">
+        <span id="omnibox-icon" class="omnibox-icon" aria-hidden="true">⌕</span>
+        <input id="omnibox-input" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+               placeholder="주소를 입력하거나 무엇이든 물어보세요" aria-label="주소 또는 질문 (Ctrl+L)" />
+      </form>
+      <button id="ai-toggle" class="ai-btn" aria-pressed="true" title="AI 패널 (Ctrl+J)">✦ <span>Claude</span></button>
+      <button id="settings-btn" class="icon-btn" aria-label="설정" title="설정">⚙</button>
+    </nav>
+  </header>
+
+  <div class="workspace">
+    <main id="view" class="view"></main>
+    <aside id="panel" class="panel" aria-label="AI 어시스턴트">
+      <div class="panel-head">
+        <span>✦ 이 페이지에 대해 묻기</span>
+        <button id="panel-close" class="icon-btn" aria-label="패널 닫기">×</button>
+      </div>
+      <div id="panel-body" class="panel-body"></div>
+    </aside>
+  </div>
+
+  <dialog id="settings-dialog">
+    <form id="settings" method="dialog" class="settings">
+      <h2>설정</h2>
+      <p class="settings-message" data-message hidden></p>
+
+      <fieldset>
+        <legend>Claude</legend>
+        <label>Anthropic API 키
+          <input name="apiKey" type="password" autocomplete="off" placeholder="sk-ant-…" />
+        </label>
+        <label class="check"><input name="remember" type="checkbox" /> 이 브라우저에 저장</label>
+        <p class="hint">키는 <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener noreferrer">Claude Console</a>에서 만들 수 있습니다.
+          이 브라우저에만 보관되고 api.anthropic.com 으로 가는 요청에만 쓰입니다. 공용 컴퓨터에서는 저장하지 마세요.</p>
+        <div class="grid2">
+          <label>모델 <select name="model"></select></label>
+          <label>답변 깊이 <select name="effort"></select></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>페이지 읽기</legend>
+        <label>리더 프록시 주소
+          <input name="reader" type="url" placeholder="https://r.jina.ai/" />
+        </label>
+        <label>리더 프록시 키 (선택)
+          <input name="readerKey" type="password" autocomplete="off" placeholder="요청 한도를 늘릴 때만" />
+        </label>
+        <p class="hint">브라우저는 다른 사이트의 HTML을 직접 읽을 수 없어, 페이지를 마크다운으로 바꿔 주는 프록시를 거칩니다.</p>
+      </fieldset>
+
+      <div class="settings-actions">
+        <button type="button" class="danger" data-clear>모든 데이터 지우기</button>
+        <span class="spacer"></span>
+        <button value="cancel" formnovalidate>취소</button>
+        <button value="save" class="primary">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

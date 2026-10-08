@@ -1,0 +1,30 @@
+name: Check
+
+# 배포가 빌드에 의존하므로, PR 단계에서 테스트와 빌드가 깨졌는지 먼저 잡습니다.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - name: Check expected files exist
+        run: |
+          for f in _site/index.html _site/app.js _site/styles.css _site/CNAME; do
+            test -f "$f" || { echo "빠진 파일: $f"; exit 1; }
+          done

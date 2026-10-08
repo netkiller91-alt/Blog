@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>AI 브라우저</ShortName>
+  <Description>Claude에게 묻거나 페이지를 읽기 모드로 엽니다</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url type="text/html" method="get" template="https://demotetoprod.com/?q={searchTerms}"/>
+</OpenSearchDescription>
