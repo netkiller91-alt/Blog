@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 브라우저</title>
+  <meta name="description" content="할 일을 맡기면 AI 에이전트가 직접 클릭하고 입력하며 대신 해 주는 데스크톱 브라우저." />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d9643a'/%3E%3Cpath d='M16 6l2.6 7.4L26 16l-7.4 2.6L16 26l-2.6-7.4L6 16l7.4-2.6z' fill='white'/%3E%3C/svg%3E" />
+  <style>
+    :root { --bg: #f6f5f2; --surface: #fff; --text: #1d1d1f; --muted: #6b6b70; --border: #dcdad3; --accent: #d9643a; --soft: #fbe9e1; --accent-text: #b44d26; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #16171a; --surface: #1d1e22; --text: #ececef; --muted: #9a9aa2; --border: #33343a; --accent: #e8794e; --soft: #3a2519; --accent-text: #f0956f; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    main { max-width: 920px; margin: 0 auto; padding: 0 16px 80px; }
+    header { padding: 12vh 0 48px; text-align: center; }
+    .logo { color: var(--accent); }
+    h1 { font-size: clamp(34px, 6vw, 54px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 16px; }
+    .lead { font-size: clamp(17px, 2.4vw, 20px); color: var(--muted); max-width: 620px; margin: 0 auto 32px; }
+    .cta { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .btn { display: inline-block; padding: 12px 22px; border-radius: 999px; text-decoration: none; font-weight: 650; border: 1px solid var(--border); color: var(--text); background: var(--surface); }
+    .btn.primary { background: var(--accent); border-color: transparent; color: #fff; }
+    .note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+    .demo { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 0 auto 64px; max-width: 640px; box-shadow: 0 6px 30px rgb(0 0 0 / 0.08); }
+    .demo .task { background: var(--soft); padding: 10px 14px; border-radius: 12px 12px 4px 12px; margin-left: 15%; }
+    .demo ol { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 6px; font-size: 14px; }
+    .demo .say { color: var(--muted); }
+    .demo .act { font-family: ui-monospace, Menlo, monospace; font-size: 13px; background: var(--bg); padding: 4px 10px; border-radius: 6px; color: var(--muted); }
+    .demo .act::before { content: "● "; color: #2f8a4e; }
+    .demo .ask { border: 1px solid var(--accent); border-radius: 10px; padding: 8px 12px; }
+    .demo .ask b { color: var(--accent-text); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    h2 { font-size: 24px; letter-spacing: -0.02em; margin: 64px 0 16px; }
+    ol.steps { padding-left: 1.3em; }
+    ol.steps li { margin: 6px 0; }
+    code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background: var(--surface); border: 1px solid var(--border); padding: 0.1em 0.4em; border-radius: 6px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 16px; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span class="logo">✦</span> 할 일을 말하면,<br />브라우저가 대신 합니다.</h1>
+      <p class="lead">AI 브라우저는 Claude 에이전트가 들어 있는 데스크톱 브라우저입니다. 검색하고, 링크를 누르고, 양식을 채우고, 여러 사이트를 비교하는 일을 사용자 대신 끝까지 해냅니다.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/netkiller91-alt/Blog/releases/latest">다운로드</a>
+        <a class="btn" href="https://github.com/netkiller91-alt/Blog">소스 보기</a>
+      </div>
+      <p class="note">macOS · Windows · Linux · Anthropic API 키가 필요합니다</p>
+    </header>
+
+    <section class="demo" aria-label="사용 예시">
+      <div class="task">다음 주 토요일 서울→부산 KTX 오전 기차 중 제일 빠른 거 찾아서 예매 직전까지 해줘</div>
+      <ol>
+        <li class="say">코레일 예매 페이지로 이동합니다.</li>
+        <li class="act">이동: https://www.letskorail.com</li>
+        <li class="act">입력 [12]: "서울" · 입력 [14]: "부산"</li>
+        <li class="act">선택 [18]: 10월 17일 · 클릭 [21] "조회"</li>
+        <li class="say">09:00 출발 KTX 027편이 2시간 15분으로 가장 빠릅니다.</li>
+        <li class="ask"><b>허락이 필요합니다</b> — KTX 027편 일반실 1매 59,800원 예매를 진행할까요?</li>
+      </ol>
+    </section>
+
+    <div class="grid">
+      <div class="card"><h3>직접 조작합니다</h3><p>페이지를 읽고 클릭·입력·스크롤·탭 전환을 스스로 합니다. 요약만 하는 게 아니라 일을 끝냅니다.</p></div>
+      <div class="card"><h3>중요한 순간엔 묻습니다</h3><p>결제·전송·삭제처럼 되돌리기 어려운 일은 반드시 허락을 받고, 비밀번호는 절대 대신 입력하지 않습니다.</p></div>
+      <div class="card"><h3>언제든 넘겨받습니다</h3><p>에이전트가 하는 일이 그대로 보이고, 멈추기 한 번이면 바로 직접 이어서 할 수 있습니다.</p></div>
+      <div class="card"><h3>키는 내 컴퓨터에</h3><p>API 키는 운영체제 키체인으로 암호화해 보관하고, 방문하는 웹페이지에는 절대 노출되지 않습니다.</p></div>
+    </div>
+
+    <h2>시작하기</h2>
+    <ol class="steps">
+      <li><a href="https://github.com/netkiller91-alt/Blog/releases/latest">릴리스 페이지</a>에서 운영체제에 맞는 파일을 받아 설치합니다.</li>
+      <li><a href="https://platform.claude.com/settings/keys">Claude Console</a>에서 API 키를 만들고, 앱 오른쪽 위 ⚙ 설정에 넣습니다.</li>
+      <li>주소창이나 오른쪽 에이전트 패널에 할 일을 그대로 씁니다. 예) <code>네이버 날씨에서 내일 서울 날씨 알려줘</code></li>
+    </ol>
+  </main>
+  <footer>AI 브라우저 · <a href="https://github.com/netkiller91-alt">netkiller91-alt</a></footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+name: Release
+
+# v0.1.0 같은 태그를 올리면 macOS·Windows·Linux 설치 파일을 만들어 GitHub 릴리스에 올립니다.
+#   git tag v0.1.0 && git push origin v0.1.0
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+      # 코드 서명 인증서가 없으면 서명 없이 만듭니다(처음 실행 때 운영체제 경고가 뜹니다).
+      - name: Build installers
+        run: npx electron-builder --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"

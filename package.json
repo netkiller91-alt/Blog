@@ -1,0 +1,58 @@
+{
+  "name": "ai-browser",
+  "productName": "AI 브라우저",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "할 일을 맡기면 AI 에이전트가 직접 클릭하고 입력하며 대신 해 주는 데스크톱 브라우저",
+  "main": "app/main.js",
+  "author": "netkiller91-alt",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.mjs",
+    "dist": "electron-builder --publish never"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.127.0"
+  },
+  "devDependencies": {
+    "electron": "44.4.3",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.demotetoprod.aibrowser",
+    "productName": "AI Browser",
+    "files": [
+      "app/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Network"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "netkiller91-alt",
+        "repo": "Blog",
+        "releaseType": "release"
+      }
+    ]
+  }
+}

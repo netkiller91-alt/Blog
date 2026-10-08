@@ -1,144 +1,70 @@
-# AI Engineering Notes — 개인 블로그
+# AI 브라우저
 
-AI Engineering(RAG · 에이전트 · 평가 · 서빙)을 주제로 한 개인 블로그입니다.
-원본은 `content/` 의 마크다운이고, 의존성 없는 생성기가 사이트를 만들어
-GitHub Pages로 배포합니다. 글쓰기·사진 업로드는 사이트의 `/admin/` 에서 합니다.
+할 일을 말하면 AI 에이전트가 직접 클릭하고 입력하며 대신 해 주는 데스크톱 브라우저입니다.
+소개·다운로드 페이지: <https://demotetoprod.com>
 
-## 구성
+- 주소창이나 오른쪽 에이전트 패널에 **할 일을 그대로 쓰면** Claude 에이전트가 브라우저를 직접 조작해 끝까지 해냅니다.
+  페이지를 읽고, 링크와 버튼을 누르고, 검색창·양식을 채우고, 스크롤하고, 탭을 나눠 여러 사이트를 비교합니다.
+- 에이전트가 하는 모든 동작이 패널에 그대로 보이고, **멈추기**를 누르거나 직접 페이지를 조작해 언제든 넘겨받을 수 있습니다.
+- 주소를 넣으면 평범한 브라우저처럼 이동합니다. 탭, 뒤로/앞으로, 새로 고침이 있습니다.
 
-```
-content/              ← 원본은 전부 여기에 있습니다
-  site.json             사이트 제목·주소·프로필 링크·AdSense 설정
-  intro.md              홈 인사말
-  now.md                요즘 섹션
-  links.md              읽을거리(외부 기사 링크)
-  posts/*.md            글
-  pages/*.md            고정 페이지 (개인정보처리방침 등)
-  media/                올린 사진
-build/build.mjs       정적 사이트 생성기 (의존성 없음)
-admin/                브라우저 관리 화면 (noindex, 광고 없음)
-oauth/                GitHub 로그인용 Cloudflare Worker (선택)
-assets/css/style.css  스타일
-assets/js/main.js     테마 전환, AdSense 로더
-assets/js/markdown.mjs 마크다운 렌더러 (빌드와 관리 화면이 공유)
-_site/                빌드 산출물 — 커밋하지 않습니다
-```
+## 안전장치
 
-**`_site/` 안의 HTML은 손으로 고치지 마세요.** 빌드할 때마다 통째로 다시
-만들어집니다. 고칠 것은 언제나 `content/` 입니다.
+- **되돌리기 어려운 일은 먼저 묻습니다.** 결제·구매·주문, 메시지·메일·글 보내기, 삭제, 예약 확정, 계정 변경, 개인정보 제출 직전에
+  에이전트가 허락을 요청합니다. 에이전트가 깜빡해도 "결제하기", "보내기", "삭제" 같은 이름의 버튼은 앱이 직접 가로채 묻습니다
+  (설정에서 끌 수 있음).
+- **비밀번호는 대신 입력하지 않습니다.** 로그인·인증번호·결제 정보는 사용자가 직접 입력하고, 그동안 에이전트는 기다립니다.
+- **웹페이지의 글은 지시로 따르지 않습니다.** 페이지에 "이렇게 하라"는 문구가 있어도 사용자가 맡긴 일만 합니다.
+- **API 키는 앱 밖으로 나가지 않습니다.** 메인 프로세스에만 있고, 운영체제 키체인(safeStorage)으로 암호화해 저장합니다.
+  웹페이지 탭과 화면 UI 어디에도 전달되지 않습니다.
 
-## 사이트에서 글쓰기
+## 쓰는 법
 
-홈 푸터의 **글쓰기** 링크, 또는 <https://demotetoprod.com/admin/> 로 들어갑니다.
+1. [릴리스](https://github.com/netkiller91-alt/Blog/releases/latest)에서 설치 파일을 받거나, 소스에서 실행합니다(아래).
+2. 오른쪽 위 ⚙ 에 [Anthropic API 키](https://platform.claude.com/settings/keys)를 넣습니다.
+3. 할 일을 씁니다. 예) `위키백과에서 '대형 언어 모델' 찾아서 역사 부분 정리해줘`
 
-로그인 방법은 두 가지입니다.
-
-**GitHub으로 로그인 (권장)** — `oauth/` 의 Cloudflare Worker 를 배포하고
-`content/site.json` 의 `admin.oauth` 에 주소를 넣으면 버튼이 나타납니다.
-버튼 한 번이면 끝이고 토큰을 다룰 일이 없습니다. 설정은 [oauth/README.md](oauth/README.md).
-
-**토큰 직접 입력** — Worker 없이 바로 쓸 수 있는 방법입니다.
-[Fine-grained 토큰](https://github.com/settings/personal-access-tokens/new)을 발급하되
-Repository access는 **이 저장소 하나**, 권한은 **Contents: Read and write** 만 주세요.
-
-어느 쪽이든 `이 브라우저에 저장`을 체크하면 그 기기에서는 다시 입력할 필요가 없고,
-체크하지 않으면 탭을 닫을 때까지만 유지됩니다.
-
-> 정적 사이트라 서버 세션이 없고, `demotetoprod.com` 은 `github.com` 과 다른
-> 오리진이라 GitHub 로그인 상태를 그대로 쓸 수 없습니다. 그래서 저장소에 쓰려면
-> 어떤 형태로든 자격 증명이 필요합니다 — 위 두 방법의 차이는 그 증명을
-> 손으로 넣느냐, 버튼으로 받아 오느냐입니다.
-
-| 탭 | 하는 일 |
+| 단축키 | 동작 |
 | --- | --- |
-| 글 | 목록에서 골라 수정, `+ 새 글`로 작성, 삭제 |
-| 인사말 | `content/intro.md` |
-| 요즘 | `content/now.md` |
-| 읽을거리 | `content/links.md` |
+| Ctrl/⌘ + L | 주소창 |
+| Ctrl/⌘ + K | 에이전트에게 맡기기 |
+| Ctrl/⌘ + J | 에이전트 패널 열기/닫기 |
+| Ctrl/⌘ + T / W | 새 탭 / 탭 닫기 |
+| Alt + ← / → | 뒤로 / 앞으로 |
 
-저장하면 해당 마크다운 파일 **하나만** 커밋되고, GitHub Actions가
-사이트 전체를 다시 빌드해 배포합니다. 보통 1분쯤 걸립니다.
+## 구조
 
-인사말·요즘·읽을거리 탭은 **현재 내용을 불러오기 전까지 입력과 저장이 잠깁니다.**
-빈 칸에 쓴 내용으로 기존 파일을 통째로 덮어쓰는 사고를 막기 위한 것이라,
-잠겨 있다면 토큰을 넣거나 `다시 불러오기`를 누르면 풀립니다.
-
-### 사진
-
-본문 편집기에서 **사진 올리기** 버튼을 누르거나, 본문 영역에 파일을
-끌어다 놓으면 `content/media/` 에 올라가고 커서 위치에
-`![설명](/content/media/파일명)` 이 삽입됩니다. 한 장에 5MB까지입니다.
-
-### 초안
-
-`초안으로 두기`를 체크하면 파일에 `draft: true` 가 붙고 빌드에서 제외됩니다.
-저장소에는 남지만 사이트에는 나오지 않습니다.
-
-### 본문 문법
-
-`##` 제목, `**굵게**`, `*강조*`(형광펜), `` `코드` ``, ``` 코드 블록,
-`-`/`1.` 목록, `>` 인용, `[링크](주소)`, `![설명](이미지)`, `---` 구분선.
-입력은 모두 이스케이프되므로 본문에 HTML을 직접 넣을 수는 없습니다.
-
-### 토큰 취급
-
-`admin/` 은 **광고·분석 스크립트를 싣지 않고** `noindex` 이며 `robots.txt`
-에서도 제외됩니다. 토큰이 서드파티 스크립트와 같은 페이지에 있지 않게 하려는
-설계이므로, **이 페이지에 AdSense 슬롯을 추가하지 마세요.**
-
-토큰은 체크박스를 켠 경우에만 `localStorage` 에 저장되고 `api.github.com`
-외에는 전송되지 않습니다. 공용 PC에서는 저장하지 마세요.
-
-## 로컬에서 보기
-
-```bash
-node build/build.mjs
-python3 -m http.server 8000 --directory _site
-# http://localhost:8000
+```
+app/
+  main.js            Electron 메인: 창, 탭(WebContentsView), 설정·키 저장, IPC
+  preload.cjs        화면 UI에만 붙는 다리 (window.browserAPI)
+  agent/
+    agent.js         에이전트 루프: Claude 호출(스트리밍), 도구 실행, 중단·오류 처리
+    tools.js         도구 정의(strict 스키마)와 실행, 입력 검증, 위험 클릭 감지
+    page-script.js   페이지 안에서 도는 함수: 요소 번호 붙이기, 위치 찾기, 입력 준비
+  ui/                브라우저 크롬 화면 (탭 줄, 주소창, 에이전트 패널, 설정, 새 탭)
+  lib/omnibox.js     입력이 주소인지 할 일인지 판별
+site/                demotetoprod.com 소개·다운로드 페이지 (GitHub Pages)
+test/                단위 테스트
 ```
 
-로컬(localhost) 또는 `?adpreview=1` 로 접속하면 광고 자리표시자가 표시됩니다.
+에이전트는 페이지를 화면 캡처 대신 **구조로** 읽습니다. 보이는 버튼·링크·입력칸마다 번호를 붙여 목록으로 넘기고,
+모델이 번호를 고르면 앱이 그 요소 위치에 실제 마우스·키보드 입력을 보냅니다. 그래서 빠르고 토큰이 적게 들며,
+그림이나 레이아웃을 봐야 할 때만 `screenshot` 도구로 화면을 봅니다.
 
-## 배포 (GitHub Pages)
+Claude 호출 설정: 기본 모델 `claude-opus-5-5`(설정에서 Sonnet 5.5 / Haiku 5.5 선택), 도구 호출 사이의 진행 메모를
+보여 주는 `thinking.display: "updates"`, 거절 시 서버 측 대체 모델(`fallbacks: "default"`), 긴 작업에서 오래된 도구 결과를
+서버가 비우는 컨텍스트 편집(`clear_tool_uses`).
 
-`main`에 푸시하면 `.github/workflows/pages.yml`이 `node build/build.mjs`
-를 돌려 `_site/` 를 만들고 배포합니다. 외부 패키지를 설치하지 않아 20초쯤 걸립니다.
+## 개발
 
-PR에서는 `build-check.yml`이 같은 빌드를 돌려 결과물이 제대로 나오는지
-먼저 확인합니다. 배포가 빌드에 의존하므로, 깨진 빌드를 main에 올리기 전에
-잡으려는 목적입니다.
+```sh
+npm install
+npm start         # 앱 실행
+npm test          # 단위 테스트
+npm run dist      # 지금 운영체제용 설치 파일 (dist/)
+```
 
-- 공개 주소: <https://demotetoprod.com/>
-- **최초 1회만** 저장소 Settings → Pages → Build and deployment →
-  Source를 `GitHub Actions`로 설정해야 합니다. `GITHUB_TOKEN`에는 Pages
-  사이트를 새로 생성할 권한이 없어서, 이 설정 없이 워크플로를 돌리면
-  `Create Pages site failed: Resource not accessible by integration`으로
-  실패합니다. 한 번 켜두면 이후로는 푸시만으로 배포됩니다.
-
-### 커스텀 도메인
-
-`demotetoprod.com`을 쓰도록 설정되어 있습니다 (저장소 루트의 `CNAME` 파일).
-도메인 등록기관 DNS에 아래 레코드가 있어야 합니다.
-
-| 타입 | 이름 | 값 |
-|---|---|---|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
-| CNAME | `www` | `netkiller91-alt.github.io` |
-
-DNS를 먼저 넣은 뒤 Settings → Pages에서 도메인을 확인하고
-**Enforce HTTPS**를 켜세요. 인증서 발급에 수 분~1시간이 걸립니다.
-
-DNS를 Cloudflare에서 관리하고 프록시(주황색 구름)를 켠다면,
-SSL/TLS 암호화 모드를 `Automatic` 또는 `Full (strict)`로 두어야 합니다.
-`Flexible`이면 Cloudflare가 오리진에 HTTP로 요청하고 GitHub이 HTTPS로
-돌려보내면서 무한 리다이렉트(`ERR_TOO_MANY_REDIRECTS`)가 발생합니다.
-인증서를 처음 발급받을 때는 프록시를 꺼 두어야 검증이 통과합니다.
-
-## 남은 작업
-
-- 직접 쓴 글이 아직 없습니다. AdSense 심사에는 실제 콘텐츠 분량이 필요합니다.
-- 승인 후 `content/site.json` 의 `adsense.client` 와 `adsense.slots` 를 채우고
-  `ads.txt` 주석을 해제하세요. 비어 있으면 광고 스크립트를 아예 로드하지 않습니다.
+`v0.1.0` 같은 태그를 푸시하면 GitHub Actions가 macOS·Windows·Linux 설치 파일을 만들어 릴리스에 올립니다.
+코드 서명 인증서가 없으면 서명 없이 만들어지므로, 처음 실행할 때 운영체제 경고가 뜹니다.
+`site/` 가 `main` 에 머지되면 소개 페이지가 GitHub Pages로 배포됩니다.

@@ -1,0 +1,31 @@
+name: Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      # 단위 테스트에는 Electron 실행 파일이 필요 없습니다.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Syntax check
+        run: |
+          for f in app/main.js app/preload.cjs app/ui/ui.js app/ui/newtab.js; do
+            node --check "$f"
+          done
