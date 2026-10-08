@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' http: https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>AI 브라우저</title>
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body>
+  <header class="chrome">
+    <div class="tabs">
+      <div id="tabstrip" class="tabstrip" role="tablist" aria-label="탭"></div>
+      <button id="new-tab" class="icon-btn" title="새 탭 (Ctrl+T)" aria-label="새 탭">＋</button>
+    </div>
+    <nav class="toolbar">
+      <button id="back" class="icon-btn" title="뒤로 (Alt+←)" aria-label="뒤로">←</button>
+      <button id="forward" class="icon-btn" title="앞으로 (Alt+→)" aria-label="앞으로">→</button>
+      <button id="reload" class="icon-btn" title="새로 고침 (Ctrl+R)" aria-label="새로 고침">↻</button>
+      <form id="omnibox" class="omnibox">
+        <span id="omnibox-icon" class="omnibox-icon" aria-hidden="true">⌕</span>
+        <input id="omnibox-input" type="text" autocomplete="off" spellcheck="false"
+               placeholder="주소를 입력하거나, 에이전트에게 맡길 일을 쓰세요" aria-label="주소 또는 할 일 (Ctrl+L)" />
+      </form>
+      <button id="agent-toggle" class="agent-btn" aria-pressed="true" title="에이전트 패널 (Ctrl+J)">✦ <span>에이전트</span></button>
+      <button id="settings-btn" class="icon-btn" title="설정" aria-label="설정">⚙</button>
+    </nav>
+  </header>
+
+  <div class="workspace">
+    <div class="page-slot" aria-hidden="true"></div>
+    <aside id="panel" class="panel" aria-label="에이전트">
+      <div class="panel-head">
+        <span class="panel-title">✦ 에이전트</span>
+        <button id="agent-reset" class="text-btn" title="지금까지의 대화를 잊고 새로 시작">새 대화</button>
+      </div>
+      <div id="log" class="log" aria-live="polite"></div>
+      <form id="task-form" class="task-form">
+        <textarea id="task-input" rows="2" placeholder="무엇을 대신 해 드릴까요? 예) 다음 주 토요일 서울→부산 KTX 오전 시간표 찾아줘" aria-label="할 일"></textarea>
+        <div class="task-actions">
+          <span id="model-label" class="model-label"></span>
+          <button type="button" id="stop-btn" class="stop-btn" hidden>■ 멈추기</button>
+          <button type="submit" id="run-btn" class="run-btn">맡기기</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <dialog id="settings-dialog">
+    <form id="settings" method="dialog" class="settings">
+      <h2>설정</h2>
+      <p class="settings-message" data-message hidden></p>
+      <label>Anthropic API 키
+        <input name="apiKey" type="password" autocomplete="off" placeholder="sk-ant-…" />
+      </label>
+      <p class="hint" data-key-hint></p>
+      <div class="grid2">
+        <label>모델 <select name="model"></select></label>
+        <label>생각 깊이
+          <select name="effort">
+            <option value="low">빠르게</option>
+            <option value="medium">보통</option>
+            <option value="high">꼼꼼하게</option>
+          </select>
+        </label>
+      </div>
+      <label class="check"><input name="confirmRisky" type="checkbox" /> 결제·전송·삭제처럼 보이는 버튼은 누르기 전에 항상 묻기</label>
+      <div class="settings-actions">
+        <button type="button" class="danger" data-forget>키 삭제</button>
+        <span class="spacer"></span>
+        <button value="cancel" formnovalidate>취소</button>
+        <button value="save" class="primary">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="ui.js"></script>
+</body>
+</html>
